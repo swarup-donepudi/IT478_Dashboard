@@ -11,8 +11,8 @@
 
     <ui:decorate template="templates\AppTheme.xhtml">
         <ui:define name="content">
-            Begin Year 
-            <p:selectOneMenu value="#{yearwiseGraphController.yearwiseBegin}">
+            <table cellspacing="20">
+                <tr><td>Begin Year</td><td><p:selectOneMenu value="#{yearwiseGraphController.yearwiseBegin}">
                 <f:selectItem itemValue="2007" itemLabel="2007" />
                 <f:selectItem itemValue="2008" itemLabel="2008" />
                 <f:selectItem itemValue="2009" itemLabel="2009" />
@@ -21,10 +21,8 @@
                 <f:selectItem itemValue="2012" itemLabel="2012" />
                 <f:selectItem itemValue="2013" itemLabel="2013" />
                 <f:selectItem itemValue="2014" itemLabel="2014" />
-            </p:selectOneMenu>
-            
-            End Year 
-            <p:selectOneMenu value="#{yearwiseGraphController.yearwiseEnd}">
+            </p:selectOneMenu></td>
+                    <td>End Year<td><p:selectOneMenu value="#{yearwiseGraphController.yearwiseEnd}">
                 <f:selectItem itemValue="2007" itemLabel="2007" />
                 <f:selectItem itemValue="2008" itemLabel="2008" />
                 <f:selectItem itemValue="2009" itemLabel="2009" />
@@ -33,11 +31,10 @@
                 <f:selectItem itemValue="2012" itemLabel="2012" />
                 <f:selectItem itemValue="2013" itemLabel="2013" />
                 <f:selectItem itemValue="2014" itemLabel="2014" />
-            </p:selectOneMenu>  
-            
-            <p:commandButton action="#{yearwiseGraphController.rebuildYearwiseGraph()}" value="Show Trends"/>
-            
-            <p:chart type="bar" model="#{yearwiseGraphController.yearwiseGraph}" style="height:400px"/>           
+            </p:selectOneMenu></td><td><p:commandButton action="#{yearwiseGraphController.rebuildYearwiseGraph()}" value="Show Trends"/></td></tr>
+            </table>
+
+            <p:chart type="bar" model="#{yearwiseGraphController.yearwiseGraph}" style="margin:100px;height:400px"/>           
 
         </ui:define>            
     </ui:decorate>
