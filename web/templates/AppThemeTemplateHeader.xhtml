@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+    <h:head>
+        <h:outputStylesheet name="AppTheme.css" library="css" />
+    </h:head>
+    <body>
+        <ui:composition>
+            <h:form>
+                <nav>
+                <ul id="navBar">
+                    <li><h:commandLink value="HOME" action="Home?faces-redirect=true"></h:commandLink></li>
+                    <li><h:commandLink value="YEARWISE TRENDS" action="DefaultYearwise?faces-redirect=true"></h:commandLink></li>
+                    <li><h:commandLink value="GEOLOCATIONWISE TRENDS" action="DefaultGeo?faces-redirect=true"></h:commandLink></li>
+                    <li><h:commandLink value="SIGN OUT" action="index?faces-redirect=true"></h:commandLink></li>
+                </ul>
+               </nav>
+            </h:form>
+        </ui:composition>
+    </body>
+</html>
