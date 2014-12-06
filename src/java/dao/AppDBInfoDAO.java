@@ -18,7 +18,7 @@ public class AppDBInfoDAO {
     public String dbPassword;
 
     public AppDBInfoDAO() {
-        this.databaseURL = "jdbc:derby://localhost:1527/IT478_DashboardDB";
+        this.databaseURL = "jdbc:derby://gfish.it.ilstu.edu:1527/IT478_DashboardDB";
         this.dbUserName = "it478project";
         this.dbPassword = "student";
     }

@@ -11,22 +11,29 @@
     <ui:decorate template="templates\AppTheme.xhtml">
         <ui:define name="content">
             <h:form id="selectYearForm">
-            Select Year 
-            <p:selectOneMenu id="selectedYear" value="#{geoGraphController.geoYear}" style="width:100px;margin:10px">
-                <f:selectItem itemValue="2014" itemLabel="2014" />
-                <f:selectItem itemValue="2013" itemLabel="2013" />
-                <f:selectItem itemValue="2012" itemLabel="2012" />
-                <f:selectItem itemValue="2011" itemLabel="2011" />
-                <f:selectItem itemValue="2010" itemLabel="2010" />
-                <f:selectItem itemValue="2009" itemLabel="2009" />
-                <f:selectItem itemValue="2008" itemLabel="2008" />
-                <f:selectItem itemValue="2007" itemLabel="2007" />
-            </p:selectOneMenu>
-            <p:commandButton action="#{geoGraphController.rebuildGeoLocationGraph()}" value="Show Trends"/>
+                <table cellspacing="20">
+                    <tr>
+                        <td>Select Year</td>
+                        <td>
+                            <p:selectOneMenu id="selectedYear" value="#{geoGraphController.geoYear}" style="width:100px;margin:10px">
+                                <f:selectItem itemValue="2014" itemLabel="2014" />
+                                <f:selectItem itemValue="2013" itemLabel="2013" />
+                                <f:selectItem itemValue="2012" itemLabel="2012" />
+                                <f:selectItem itemValue="2011" itemLabel="2011" />
+                                <f:selectItem itemValue="2010" itemLabel="2010" />
+                                <f:selectItem itemValue="2009" itemLabel="2009" />
+                                <f:selectItem itemValue="2008" itemLabel="2008" />
+                                <f:selectItem itemValue="2007" itemLabel="2007" />
+                            </p:selectOneMenu>
+                        </td>
+                        <td>
+                            <p:commandButton action="#{geoGraphController.rebuildGeoLocationGraph()}" value="Show Trends"/>                            
+                        </td>
+                    </tr>
+                </table>
+            </h:form>
             <p:pieChart title="GeoLocation Trends" value="#{geoGraphController.geoLocationGraph}" legendPosition="e" 
                         id="geoTrendsChart"/>
-    
-            </h:form>
         </ui:define>            
     </ui:decorate>
 </ui:composition>

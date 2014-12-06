@@ -8,34 +8,42 @@
 
     <ui:decorate template="templates\AppTheme.xhtml">
         <ui:define name="content">
-            Begin Year 
-            <p:selectOneMenu value="#{yearwiseGraphController.yearwiseBegin}">
-                <f:selectItem itemValue="2007" itemLabel="2007" />
-                <f:selectItem itemValue="2008" itemLabel="2008" />
-                <f:selectItem itemValue="2009" itemLabel="2009" />
-                <f:selectItem itemValue="2010" itemLabel="2010" />
-                <f:selectItem itemValue="2011" itemLabel="2011" />
-                <f:selectItem itemValue="2012" itemLabel="2012" />
-                <f:selectItem itemValue="2013" itemLabel="2013" />
-                <f:selectItem itemValue="2014" itemLabel="2014" />
-            </p:selectOneMenu>
-            
-            End Year 
-            <p:selectOneMenu value="#{yearwiseGraphController.yearwiseEnd}">
-                <f:selectItem itemValue="2007" itemLabel="2007" />
-                <f:selectItem itemValue="2008" itemLabel="2008" />
-                <f:selectItem itemValue="2009" itemLabel="2009" />
-                <f:selectItem itemValue="2010" itemLabel="2010" />
-                <f:selectItem itemValue="2011" itemLabel="2011" />
-                <f:selectItem itemValue="2012" itemLabel="2012" />
-                <f:selectItem itemValue="2013" itemLabel="2013" />
-                <f:selectItem itemValue="2014" itemLabel="2014" />
-            </p:selectOneMenu>  
-            
-            <p:commandButton action="#{yearwiseGraphController.rebuildYearwiseGraph()}" value="Show Trends"/>
-            
-            <p:chart type="bar" model="#{yearwiseGraphController.yearwiseGraph}" style="height:300px"/>           
-
+            <h:form id="selectionForm">
+                <table cellspacing="20">
+                    <tr>
+                        <td>Begin Year</td>
+                        <td>
+                            <p:selectOneMenu value="#{yearwiseGraphController.ywSelection.yearwiseBegin}">
+                                <f:selectItem itemValue="2007" itemLabel="2007" />
+                                <f:selectItem itemValue="2008" itemLabel="2008" />
+                                <f:selectItem itemValue="2009" itemLabel="2009" />
+                                <f:selectItem itemValue="2010" itemLabel="2010" />
+                                <f:selectItem itemValue="2011" itemLabel="2011" />
+                                <f:selectItem itemValue="2012" itemLabel="2012" />
+                                <f:selectItem itemValue="2013" itemLabel="2013" />
+                                <f:selectItem itemValue="2014" itemLabel="2014" />
+                            </p:selectOneMenu>
+                        </td>
+                        <td>End Year</td>
+                        <td>
+                            <p:selectOneMenu value="#{yearwiseGraphController.ywSelection.yearwiseEnd}">
+                                <f:selectItem itemValue="2007" itemLabel="2007" />
+                                <f:selectItem itemValue="2008" itemLabel="2008" />
+                                <f:selectItem itemValue="2009" itemLabel="2009" />
+                                <f:selectItem itemValue="2010" itemLabel="2010" />
+                                <f:selectItem itemValue="2011" itemLabel="2011" />
+                                <f:selectItem itemValue="2012" itemLabel="2012" />
+                                <f:selectItem itemValue="2013" itemLabel="2013" />
+                                <f:selectItem itemValue="2014" itemLabel="2014" />
+                            </p:selectOneMenu>
+                        </td>
+                        <td>
+                            <p:commandButton action="#{yearwiseGraphController.rebuildYearwiseGraph()}" value="Show Trends"></p:commandButton>
+                        </td>
+                    </tr>
+                </table>
+            </h:form>
+            <p:chart type="bar" model="#{yearwiseGraphController.yearwiseGraph}" style="margin:50px;height:350px"/>    
         </ui:define>            
     </ui:decorate>
 </ui:composition>

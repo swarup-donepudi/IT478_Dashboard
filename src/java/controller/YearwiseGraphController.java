@@ -7,16 +7,20 @@ package controller;
 import dao.YearwiseDAO;
 import java.io.IOException;
 import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.faces.bean.SessionScoped;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import model.YearwiseGraphBean;
+import model.YearwiseSelectionBean;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.HorizontalBarChartModel ;
+import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
 /**
@@ -26,34 +30,19 @@ import org.primefaces.model.chart.ChartSeries;
 @Named(value = "yearwiseGraphController")
 @SessionScoped
 public class YearwiseGraphController implements Serializable {
-
-    private HorizontalBarChartModel  yearwiseGraph;
-    private int yearwiseBegin;
-    private int yearwiseEnd;
+    private YearwiseSelectionBean ywSelection;
+    private HorizontalBarChartModel yearwiseGraph;
     private ArrayList<YearwiseGraphBean> yearwiseGraphEntrees;
 
     /**
      * Creates a new instance of YearwiseGraphController
      */
     public YearwiseGraphController() {
+        this.ywSelection = new YearwiseSelectionBean();
+        this.yearwiseGraphEntrees = new ArrayList<>();
+        this.yearwiseGraph = new HorizontalBarChartModel();
     }
-
-    public int getYearwiseBegin() {
-        return yearwiseBegin;
-    }
-
-    public void setYearwiseBegin(int yearwiseBegin) {
-        this.yearwiseBegin = yearwiseBegin;
-    }
-
-    public int getYearwiseEnd() {
-        return yearwiseEnd;
-    }
-
-    public void setYearwiseEnd(int yearwiseEnd) {
-        this.yearwiseEnd = yearwiseEnd;
-    }
-
+    
     public ArrayList<YearwiseGraphBean> getYearwiseGraphEntrees() {
         return yearwiseGraphEntrees;
     }
@@ -62,11 +51,11 @@ public class YearwiseGraphController implements Serializable {
         this.yearwiseGraphEntrees = yearwiseGraphEntrees;
     }
 
-    public HorizontalBarChartModel  getYearwiseGraph() {
+    public HorizontalBarChartModel getYearwiseGraph() {
         return yearwiseGraph;
     }
 
-    public void setYearwiseGraph(HorizontalBarChartModel   yearwiseGraph) {
+    public void setYearwiseGraph(HorizontalBarChartModel yearwiseGraph) {
         this.yearwiseGraph = yearwiseGraph;
     }
 
@@ -78,43 +67,25 @@ public class YearwiseGraphController implements Serializable {
         this.yearwiseGraphEntrees = yearwiseGraphEntrees;
     }
 
+    public YearwiseSelectionBean getYwSelection() {
+        return ywSelection;
+    }
+
+    public void setYwSelection(YearwiseSelectionBean ywSelection) {
+        this.ywSelection = ywSelection;
+    }
+
     public void loadDefaultYearwiseGraph() throws IOException, SQLException {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         this.yearwiseGraphEntrees = new ArrayList<>();
-        this.yearwiseGraph = new HorizontalBarChartModel ();
-        this.fetchYearwiseGraphEntrees(this.yearwiseBegin, this.yearwiseEnd);
-        ChartSeries India = new ChartSeries();
-        India.setLabel("China");
-        India.set("2004", 60);
-        India.set("2005", 100);
-        India.set("2006", 44);
-        India.set("2007", 150);
-        India.set("2008", 25);
-
-        ChartSeries China = new ChartSeries();
-        China.setLabel("India");
-        China.set("2004", 62);
-        China.set("2005", 60);
-        China.set("2006", 110);
-        China.set("2007", 135);
-        China.set("2008", 120);
-
-        this.yearwiseGraph.addSeries(India);
-        this.yearwiseGraph.addSeries(China);
-        
-
-        yearwiseGraph.setTitle("Applications TrendsYearwise");
-        yearwiseGraph.setLegendPosition("e");
-        yearwiseGraph.setStacked(true);
-         
-        Axis xAxis = yearwiseGraph.getAxis(AxisType.X);
-        xAxis.setLabel("Applications");
-        xAxis.setMin(0);
-        xAxis.setMax(200);
-         
-        Axis yAxis = yearwiseGraph.getAxis(AxisType.Y);
-        yAxis.setLabel("Year"); 
+        this.yearwiseGraph = new HorizontalBarChartModel();
+        YearwiseDAO yearwiseDB = new YearwiseDAO();
+        this.yearwiseGraphEntrees = new ArrayList<>();
+        yearwiseDB.fetchGraphEntreesFromDB(this.yearwiseGraphEntrees, 2000, 2015);
+        if (this.yearwiseGraphEntrees.size() > 0) {
+            this.yearwiseGraph = this.buildYearwiseGraph(this.yearwiseGraphEntrees);
+        }
     }
 
     /**
@@ -125,44 +96,63 @@ public class YearwiseGraphController implements Serializable {
     public void rebuildYearwiseGraph() throws IOException, SQLException {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         this.yearwiseGraphEntrees = new ArrayList<>();
-        int graphEntrees = 0;
-        this.yearwiseGraph = new HorizontalBarChartModel ();
-        this.fetchYearwiseGraphEntrees(this.yearwiseBegin, this.yearwiseEnd);
-        ChartSeries India = new ChartSeries();
-        India.setLabel("China");
-        India.set("2004", 120);
-        India.set("2005", 100);
-        India.set("2006", 44);
-        India.set("2007", 150);
-        India.set("2008", 25);
+        int beginYear = this.ywSelection.getYearwiseBegin();
+        int endYear = this.ywSelection.getYearwiseEnd();
+        YearwiseDAO yearwiseDB = new YearwiseDAO();
+        yearwiseDB.fetchGraphEntreesFromDB(this.yearwiseGraphEntrees, beginYear, endYear);
+        this.yearwiseGraph = this.buildYearwiseGraph(this.yearwiseGraphEntrees);
 
-        ChartSeries China = new ChartSeries();
-        China.setLabel("India");
-        China.set("2004", 52);
-        China.set("2005", 60);
-        China.set("2006", 110);
-        China.set("2007", 135);
-        China.set("2008", 120);
-
-        this.yearwiseGraph.addSeries(India);
-        this.yearwiseGraph.addSeries(China);
-        yearwiseGraph.setTitle("Applications TrendsYearwise");
-        yearwiseGraph.setLegendPosition("e");
-        yearwiseGraph.setStacked(true);
-         
-        Axis xAxis = yearwiseGraph.getAxis(AxisType.X);
-        xAxis.setLabel("Applications");
-        xAxis.setMin(0);
-        xAxis.setMax(200);
-         
-        Axis yAxis = yearwiseGraph.getAxis(AxisType.Y);
-        yAxis.setLabel("Year");
-        
         externalContext.redirect("YearwiseTrends.xhtml");
     }
 
-    private void fetchYearwiseGraphEntrees(int beginYear, int endYear) throws SQLException {
-        YearwiseDAO geoLocationDB = new YearwiseDAO();
-        geoLocationDB.fetchGraphEntreesFromDB(this.yearwiseGraphEntrees, this.yearwiseBegin, this.yearwiseEnd);
+    public HorizontalBarChartModel buildYearwiseGraph(ArrayList<YearwiseGraphBean> graphEntrees) {
+        HorizontalBarChartModel graph = new HorizontalBarChartModel();
+        Set<String> countries = this.getCountriesFromGraphEntrees(graphEntrees);
+        Iterator it = countries.iterator();
+        it.next();
+        while (it.hasNext()) {
+            int totalAppCount = 0;
+            String countryName = (String) it.next();
+            ChartSeries chartSeries = new ChartSeries();
+            chartSeries.setLabel(countryName);
+            for (YearwiseGraphBean graphEntree : graphEntrees) {
+                if (graphEntree.getCountry().equals(countryName)) {
+                    int year = graphEntree.getYear();
+                    int appCount = graphEntree.getApplicationsCount();
+                    chartSeries.set(year, appCount);
+                }
+            }
+            graph.addSeries(chartSeries);
+        }
+
+        graph.setTitle("Application Trends Yearwise");
+        graph.setLegendPosition("e");
+        graph.setStacked(false);
+
+        Axis xAxis = graph.getAxis(AxisType.X);
+        xAxis.setLabel("Applications");
+        xAxis.setMin(0);
+        xAxis.setTickInterval("1");
+        xAxis.setMax(10);
+
+        Axis yAxis = graph.getAxis(AxisType.Y);
+        yAxis.setLabel("Year");
+        return graph;
+    }
+
+    public Set<String> getCountriesFromGraphEntrees(ArrayList<YearwiseGraphBean> graphEntrees) {
+        int countryCount = 0;
+        String[] countries = new String[30];
+        for (YearwiseGraphBean graphEntree : graphEntrees) {
+            countries[countryCount] = graphEntree.getCountry();
+            countryCount++;
+        }
+        int end = countries.length;
+        Set<String> set = new HashSet<>();
+
+        for (int i = 0; i < end; i++) {
+            set.add(countries[i]);
+        }
+        return set;
     }
 }
